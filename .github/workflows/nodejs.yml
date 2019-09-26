@@ -55,4 +55,4 @@ jobs:
        username: _json_key
        password: ${{ secrets.GCP_PASSWORD }}
        registry: eu.gcr.io
-       snapshot: true
+       snapshot: true 
