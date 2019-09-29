@@ -44,13 +44,9 @@ jobs:
         path-to-lcov: ./output/coverage/lcov.info
     - name: run hello world
       run: echo akshay is good
-    - name: build the docker image
-      run: |
-        if [ "$BASE_REF" == master ]; then
-          docker build  -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_REF:11} -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_SHA} -t sapclaassistant/claassistant:${GITHUB_SHA} .
-        elif [ "$BASE_REF" == release ]; then
-          docker build -t eu.gcr.io/sap-cla-assistant/cla-assistant:latest -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_REF:11} -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_SHA} -t sapclaassistant/claassistant:${GITHUB_SHA} .
-        fi
+    - name: build the docker image for master branch
+      if: github.ref == 'refs/heads/master'
+      run: docker build  -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_REF:11} -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_SHA} -t sapclaassistant/claassistant:${GITHUB_SHA} .
     - name: push image to dockerhub
       run: | 
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
