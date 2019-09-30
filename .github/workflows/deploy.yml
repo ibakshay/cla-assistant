@@ -47,28 +47,32 @@ jobs:
     - name: build the docker image for master branch
       if: github.ref == 'refs/heads/master'
       run: docker build  -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_REF:11} -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_SHA} .
-    - name: build the docker image for release branch
-      if: github.ref == 'refs/heads/release'
+    - name: build the docker image for release green  branch
+      if: github.ref == 'refs/heads/release-green'
       run: docker build  -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_REF:11} -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_SHA} -t sapclaassistant/claassistant:${GITHUB_SHA} .
     - name: push image to dockerhub
-      if: github.ref == 'refs/heads/release'
+      if: github.ref == 'refs/heads/release-green'
       run: | 
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker push sapclaassistant/claassistant
-    - name: setup google cloud platform 
+    - name: setup google cloud platform
+      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release-green'
       uses: actions/gcloud/auth@master
       env:
         GCLOUD_AUTH: ${{ secrets.GCP_base64 }}
     - name: setup Credential helper for gcp
+      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release-green'
       uses: actions/gcloud/cli@master
       with:
         args: auth configure-docker --quiet
     - name: push image to gcp
+      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release-green'
       uses: actions/gcloud/cli@master
       with:
         entrypoint: sh
         args: -c "docker push eu.gcr.io/sap-cla-assistant/cla-assistant"
     - name: deploy cloud run service
+      if: github.ref == 'refs/heads/master'
       uses: actions/gcloud/cli@master
       with:
         entrypoint: sh
