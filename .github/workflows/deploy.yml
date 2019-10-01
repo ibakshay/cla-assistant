@@ -45,7 +45,7 @@ jobs:
       if: github.ref == 'refs/heads/master'
       run: docker build  -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_SHA} .
     - name: build the docker image for release green  branch
-       if: startsWith(github.ref, 'refs/tags')
+      if: startsWith(github.ref, 'refs/tags')
       run: docker build  -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_REF:11} -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_SHA} -t sapclaassistant/claassistant:${GITHUB_SHA} .
     - name: push image to dockerhub
       if: startsWith(github.ref, 'refs/tags')
