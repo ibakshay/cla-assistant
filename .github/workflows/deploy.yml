@@ -57,13 +57,13 @@ jobs:
       uses: actions/gcloud/auth@master
       env:
         GCLOUD_AUTH: ${{ secrets.GCP_base64 }}
-    - name: setup Credential helper for gcp || startsWith(github.ref, 'refs/tags')
-      if: github.ref == 'refs/heads/master'
+    - name: setup Credential helper for gcp 
+      if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags')
       uses: actions/gcloud/cli@master
       with:
         args: auth configure-docker --quiet
-    - name: push image to gcp || startsWith(github.ref, 'refs/tags')
-      if: github.ref == 'refs/heads/master' 
+    - name: push image to gcp 
+      if: github.ref == 'refs/heads/master'  || startsWith(github.ref, 'refs/tags')
       uses: actions/gcloud/cli@master
       with:
         entrypoint: sh
