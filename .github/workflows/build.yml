@@ -47,7 +47,7 @@ jobs:
       run: docker build  -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_SHA} .
     - name: build the docker images with tag name and latest for production
       if: startsWith(github.ref, 'refs/tags')
-      run: docker build  -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_REF:11} -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_SHA} -t eu.gcr.io/sap-cla-assistant/cla-assistant:latest -t eu.gcr.io/sap-cla-assistant/cla-assistant:latest -t sapclaassistant/claassistant:${GITHUB_SHA} .
+      run: docker build  -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_REF:10} -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_SHA} -t eu.gcr.io/sap-cla-assistant/cla-assistant:latest -t eu.gcr.io/sap-cla-assistant/cla-assistant:latest -t sapclaassistant/claassistant:${GITHUB_SHA} .
     - name: push the latest and release images to dockerhub only for releases
       if: startsWith(github.ref, 'refs/tags')
       run: | 
