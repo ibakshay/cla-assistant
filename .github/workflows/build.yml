@@ -3,9 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-    - master
-    - release
-    - release-green
+    - '*'
     tags:
     - '*'
   pull_request:
@@ -70,7 +68,7 @@ jobs:
         entrypoint: sh
         args: -c "docker push eu.gcr.io/sap-cla-assistant/cla-assistant"
     - name: deploy to staging cloud run service
-      if: github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/master' 
       uses: actions/gcloud/cli@master
       with:
         entrypoint: sh
