@@ -6,8 +6,9 @@ on:
     - master
     - release
     - release-green
+    tags:
+    - '*'
   pull_request:
-    types: [closed]
     branches:
     - master
 
@@ -41,13 +42,13 @@ jobs:
       with:
         github-token: ${{ secrets.github_token }}
         path-to-lcov: ./output/coverage/lcov.info
-    - name: build the docker image for master branch
+    - name: build the docker image with committ SHA for staging
       if: github.ref == 'refs/heads/master'
       run: docker build  -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_SHA} .
-    - name: build the docker image for release green  branch
+    - name: build the images with tag name and latest for production
       if: startsWith(github.ref, 'refs/tags')
       run: docker build  -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_REF:11} -t eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_SHA} -t eu.gcr.io/sap-cla-assistant/cla-assistant:latest -t eu.gcr.io/sap-cla-assistant/cla-assistant:latest -t sapclaassistant/claassistant:${GITHUB_SHA} .
-    - name: push image to dockerhub
+    - name: push the latest and release image to dockerhub
       if: startsWith(github.ref, 'refs/tags')
       run: | 
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
@@ -62,13 +63,13 @@ jobs:
       uses: actions/gcloud/cli@master
       with:
         args: auth configure-docker --quiet
-    - name: push image to gcp 
+    - name: push images to gcp 
       if: github.ref == 'refs/heads/master'  || startsWith(github.ref, 'refs/tags')
       uses: actions/gcloud/cli@master
       with:
         entrypoint: sh
         args: -c "docker push eu.gcr.io/sap-cla-assistant/cla-assistant"
-    - name: deploy cloud run service
+    - name: deploy to staging cloud run service
       if: github.ref == 'refs/heads/master'
       uses: actions/gcloud/cli@master
       with:
