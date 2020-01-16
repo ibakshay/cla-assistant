@@ -51,17 +51,6 @@ jobs:
       run: | 
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker push sapclaassistant/claassistant
-    - name: setup Credential helper for gcp 
-      if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags')
-      uses: actions/gcloud/cli@master
-      with:
-        args: auth configure-docker --quiet
-    - name: push images to gcp 
-      if: github.ref == 'refs/heads/master'  || startsWith(github.ref, 'refs/tags')
-      uses: actions/gcloud/cli@master
-      with:
-        entrypoint: sh
-        args: -c "docker push eu.gcr.io/sap-cla-assistant/cla-assistant"
     - name: deploy to staging cloud run service  
       uses: stefda/action-cloud-run@1.0.0
       with:
@@ -70,18 +59,7 @@ jobs:
         project: sap-cla-assistant 
         region: europe-west1
         service key: ${{ secrets.GCP_base64 }} 
-  #  - name: deploy to staging cloud run service
-   #   if: github.ref == 'refs/heads/master' 
-    #  uses: actions/gcloud/cli@master
-    #  with:
-   #     entrypoint: sh
-    #    args: -c "gcloud components install beta && gcloud components update --version 266.0.0 && gcloud --quiet --project sap-cla-assistant beta run deploy cla-assistant-staging --platform managed --region europe-west1 --image eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_SHA} "
-        #  - name: setup google cloud platform
-     # if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags')
-     # uses: actions/gcloud/auth@master
-     # env:
-      #  GCLOUD_AUTH: ${{ secrets.GCP_base64 }}
-      
+
 
         
 
