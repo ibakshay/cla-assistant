@@ -61,14 +61,16 @@ jobs:
     - name: push images to gcp 
       run: | 
         docker push eu.gcr.io/sap-cla-assistant/cla-assistant
-    - name: deploy to staging cloud run service  
-      uses: alfredosalzillo/action-cloud-run@master
-      with:
-        image: eu.gcr.io/sap-cla-assistant/cla-assistant:${{github.sha}}
-        service: cla-assistant-staging
-        project: sap-cla-assistant 
-        region: europe-west1
-        service key: ${{ secrets.GCP_base64 }} 
+    - name: deploy to staging cloud run service
+      run: gcloud --quiet --project sap-cla-assistant beta run deploy cla-assistant-staging --platform managed --region europe-west1 --image eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_SHA}
+   # - name: deploy to staging cloud run service  
+ #     uses: alfredosalzillo/action-cloud-run@master
+ #     with:
+  #      image: eu.gcr.io/sap-cla-assistant/cla-assistant:${{github.sha}}
+  #      service: cla-assistant-staging
+  #      project: sap-cla-assistant 
+   #     region: europe-west1
+   #     service key: ${{ secrets.GCP_base64 }} 
 
 
         
