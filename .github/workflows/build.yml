@@ -22,6 +22,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - name: setup gcloud CLI
+      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with: 
+        version: '275.0.0'
+        service_account_email: ${{ secrets.GCP_username}}
+        service_account_key: ${{ secrets.GCP_base64 }}   
+    # Configure docker to use the gcloud command-line tool as a credential helper
+    - run: gcloud auth configure-docker  
     - name: Use Node version 12.6
       uses: actions/setup-node@v1
       with:
@@ -51,6 +59,8 @@ jobs:
       run: | 
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker push sapclaassistant/claassistant
+    - name: push images to gcp 
+      run: docker push eu.gcr.io/sap-cla-assistant/cla-assistant
     - name: deploy to staging cloud run service  
       uses: alfredosalzillo/action-cloud-run@master
       with:
