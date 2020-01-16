@@ -52,7 +52,7 @@ jobs:
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker push sapclaassistant/claassistant
     - name: deploy to staging cloud run service  
-      uses: stefda/action-cloud-run@1.0.0
+      uses: stefda/action-cloud-run@1.0
       with:
         image: eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_SHA}
         service: cla-assistant-staging
