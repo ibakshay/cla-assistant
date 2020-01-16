@@ -59,11 +59,13 @@ jobs:
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker push sapclaassistant/claassistant
     - name: push images to gcp 
-      run: docker push eu.gcr.io/sap-cla-assistant/cla-assistant
+      run: | 
+        docker push eu.gcr.io/sap-cla-assistant/cla-assistant
+        const sha = ${GITHUB_SHA}
     - name: deploy to staging cloud run service  
       uses: alfredosalzillo/action-cloud-run@master
       with:
-        image: eu.gcr.io/sap-cla-assistant/cla-assistant:${GITHUB_SHA}
+        image: eu.gcr.io/sap-cla-assistant/cla-assistant:${{github.sha}}
         service: cla-assistant-staging
         project: sap-cla-assistant 
         region: europe-west1
