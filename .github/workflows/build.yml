@@ -61,7 +61,6 @@ jobs:
     - name: push images to gcp 
       run: | 
         docker push eu.gcr.io/sap-cla-assistant/cla-assistant
-        const sha = ${GITHUB_SHA}
     - name: deploy to staging cloud run service  
       uses: alfredosalzillo/action-cloud-run@master
       with:
