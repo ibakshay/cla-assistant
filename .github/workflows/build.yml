@@ -21,7 +21,7 @@ jobs:
         - ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: setup gcloud CLI
       uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       with: 
@@ -30,7 +30,7 @@ jobs:
     # Configure docker to use the gcloud command-line tool as a credential helper
     - run: gcloud auth configure-docker  
     - name: Use Node version 12.6
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v1
       with:
         version:  ${{ matrix.node_version }}
     - name: Npm Install
