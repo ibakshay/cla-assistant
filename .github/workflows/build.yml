@@ -30,7 +30,7 @@ jobs:
     # Configure docker to use the gcloud command-line tool as a credential helper
     - run: gcloud auth configure-docker  
     - name: Use Node version 12.6
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         version:  ${{ matrix.node_version }}
     - name: Npm Install
